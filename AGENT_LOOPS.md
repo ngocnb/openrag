@@ -6,8 +6,8 @@ This document defines the automated workflow the agent follows during the **Nigh
 
 ## Prerequisites Before Starting
 
-- The human has placed completed spec documents in `./planning/planning/specs/`.
-- Codebase documents are in `./planning/codebase`. Read it first to understand the project structure.
+- The human has placed completed spec documents in `./.planning/specs/`.
+- Codebase documents are in `./.planning/codebase`. Read it first to understand the project structure.
 - Specs prefixed with `draft-` are **ignored** — do not pick them up.
 - The working tree should be on the correct branch before the loop begins.
 
@@ -27,11 +27,16 @@ This document defines the automated workflow the agent follows during the **Nigh
 
 ---
 
-### Step 1 — Select a Task
+### Step 1 — Select a Task and Register Phase
 
-- Check for **open bugs** first from `./planning/bugs/`. Bugs have priority over features.
-- If no bugs remain, pick the next **feature spec** from `./planning/specs/` (non-draft).
-- Work on one task at a time. Do not parallelize tasks across iterations.
+1. Check for **open bugs** first from `./.planning/bugs/`. Bugs have priority over features.
+2. If no bugs remain, scan `./.planning/specs/` for non-draft specs.
+3. For each new spec not yet in `ROADMAP.md`:
+   - Read `.planning/ROADMAP.md` to find the next available phase number.
+   - Add a new phase entry to ROADMAP.md with the spec name and path.
+   - Update `.planning/STATE.md` to reference the new phase.
+4. Pick the next **pending phase** from ROADMAP.md.
+5. Work on one phase at a time. Do not parallelize across phases.
 
 ---
 
@@ -71,8 +76,9 @@ This step is **critical**. A robust testing plan is non-negotiable.
 
 ### Step 6 — Develop an Implementation Plan
 
-- Capture context using `/gsd:discuss-phase`.
-- Build a detailed implementation plan using `/gsd:plan-phase`.
+- Determine the **phase number** from ROADMAP.md for the current spec.
+- Capture context using `/gsd:discuss-phase {phase_number}`.
+- Build a detailed implementation plan using `/gsd:plan-phase {phase_number}`.
 - The human will **never read this**. It is for your own reasoning and structure.
 - Be thorough. Consider the full impact on the system.
 
@@ -102,8 +108,8 @@ This step is **critical**. A robust testing plan is non-negotiable.
 
 ### Step 9 — Implement
 
-- Execute the implementation plan using `/gsd:execute-phase`.
-- Update all affected documentation in-place (docs live in the codebase under `Docs/`).
+- Execute the implementation plan using `/gsd:execute-phase {phase_number}`.
+- Update all affected documentation in-place.
 - Follow existing conventions exactly unless a doc explicitly states otherwise.
 
 ---
@@ -139,7 +145,16 @@ Do not proceed until everything passes cleanly.
 
 ---
 
-### Step 13 — Capture Unrelated TODOs
+### Step 13 — Verify Work
+
+- Run `/gsd:verify-work {phase_number}` to perform user acceptance testing.
+- This validates the implementation meets the spec's goals.
+- If verification fails, loop back to Step 10 to fix issues.
+- Do not proceed until verification passes.
+
+---
+
+### Step 14 — Capture Unrelated TODOs
 
 - Note any unrelated issues, tech debt, or concerns noticed along the way.
 - Add them to the `TODOS.md` file under a section marked **NEEDS INPUT FROM USER**.
@@ -147,25 +162,38 @@ Do not proceed until everything passes cleanly.
 
 ---
 
-### Step 14 — Wrap Up the Task
+### Step 15 — Wrap Up the Phase
 
-1. Write a `CHANGELOG` entry for this task.
+1. Write a `CHANGELOG` entry for this phase.
 2. Commit with a **detailed commit message** written for human context:
    - What changed and why.
    - Any non-obvious decisions made.
    - References to the spec.
-3. Move it to `./.planning/specs-done/` folder.
+3. Move the spec file to `./.planning/specs-done/` folder.
+4. Update ROADMAP.md: mark the phase as `completed`.
+5. Update STATE.md:
+   - Set current phase to the next pending phase.
+   - Update "Next Action" to point to the next phase.
+6. Update PROJECT.md:
+   - Add any new tech stack or integration info discovered.
+   - Update key documents table if new docs were created.
+7. Update `.planning/codebase/` docs if the implementation changed:
+   - `ARCHITECTURE.md` — if system structure changed.
+   - `STACK.md` — if new dependencies or providers added.
+   - `INTEGRATIONS.md` — if new external services added.
+   - `CONVENTIONS.md` — if new patterns established.
+   - `CONCERNS.md` — if new tech debt or risks introduced.
 
 ---
 
-### Step 15 — Loop
+### Step 16 — Loop
 
 - Return to **Step 1** and select the next task.
 - Continue until all bugs are resolved and all completed specs are implemented.
 
 ---
 
-### Step 16 — Final Report
+### Step 17 — Final Report
 
 When all tasks are complete:
 
@@ -175,7 +203,7 @@ When all tasks are complete:
 
 ---
 
-### Step 17 — Go Silent
+### Step 18 — Go Silent
 
 - The Night Shift is complete.
 - Do **not** start new work.

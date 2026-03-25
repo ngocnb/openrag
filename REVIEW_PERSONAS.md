@@ -35,7 +35,7 @@ A review is only complete when **all six personas give a green light**. If any p
 - Does the feature do what a reasonable user would expect it to do?
 
 **Docs to load:**
-- `Docs/Skills/frontend-patterns.md`
+- `.planning/codebase/STRUCTURE.md` (for frontend patterns if documented)
 - Any relevant UX or design spec referenced in the feature spec
 
 **Not responsible for:** Technical implementation, performance, business rule correctness.
@@ -54,9 +54,9 @@ A review is only complete when **all six personas give a green light**. If any p
 - Are there simpler approaches that were not considered?
 
 **Docs to load:**
-- `Docs/System/architecture.md`
-- `Docs/System/integrations.md`
-- `Docs/System/deployment.md`
+- `.planning/codebase/ARCHITECTURE.md`
+- `.planning/codebase/INTEGRATIONS.md`
+- `.planning/codebase/STRUCTURE.md` (for deployment info if documented)
 
 **Not responsible for:** UI concerns, specific business rules, line-level code quality.
 
@@ -75,8 +75,8 @@ A review is only complete when **all six personas give a green light**. If any p
 
 **Docs to load:**
 - The feature spec itself
-- `Docs/System/auth.md` (if the feature involves permissions or roles)
-- `Docs/System/database.md` (if the feature involves data rules)
+- `.planning/codebase/ARCHITECTURE.md` (if the feature involves permissions or roles)
+- `.planning/codebase/ARCHITECTURE.md` (if the feature involves data rules)
 - `TODOS.md` (to check if related items exist)
 
 **Not responsible for:** Code style, performance, UI polish.
@@ -96,10 +96,10 @@ A review is only complete when **all six personas give a green light**. If any p
 - Are tests well-structured, meaningful, and not brittle?
 
 **Docs to load:**
-- `Docs/Skills/testing.md`
-- `Docs/Skills/error-handling.md`
-- `Docs/Skills/api-design.md` (if API surface is involved)
-- `Docs/Skills/data-modeling.md` (if data layer is involved)
+- `.planning/codebase/TESTING.md`
+- `.planning/codebase/CONVENTIONS.md` (for error handling patterns)
+- `.planning/codebase/STRUCTURE.md` (if API surface is involved)
+- `.planning/codebase/ARCHITECTURE.md` (if data layer is involved)
 
 **Not responsible for:** Visual design, business correctness, performance profiling.
 
@@ -118,9 +118,9 @@ A review is only complete when **all six personas give a green light**. If any p
 - Will this hold up under realistic load?
 
 **Docs to load:**
-- `Docs/Skills/performance.md`
-- `Docs/System/database.md`
-- `Docs/System/background-jobs.md` (if async processing is involved)
+- `.planning/codebase/CONCERNS.md` (for known performance issues)
+- `.planning/codebase/ARCHITECTURE.md` (for database and data flow)
+- `.planning/codebase/STACK.md` (for background jobs if documented)
 
 **Not responsible for:** Business logic correctness, code style, visual polish.
 
@@ -140,7 +140,7 @@ A review is only complete when **all six personas give a green light**. If any p
 
 **Docs to load:**
 - The feature spec
-- `Docs/Skills/frontend-patterns.md` (if user-facing)
+- `.planning/codebase/STRUCTURE.md` (if user-facing)
 - Any relevant changelog or prior context about user feedback on related features
 
 **Not responsible for:** Technical architecture, performance benchmarks, strict code standards.
