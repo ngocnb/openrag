@@ -1125,9 +1125,11 @@ class FlowsService:
                 "openai": "OPENAI_API_KEY",
                 "watsonx": "WATSONX_APIKEY",
                 "anthropic": "ANTHROPIC_API_KEY",
+                "alibaba": "ALIBABA_API_KEY",
             },
             "api_base": {
                 "ollama": "OLLAMA_BASE_URL",
+                "alibaba": "ALIBABA_BASE_URL",
             },
             "ollama_base_url": {
                 "ollama": "OLLAMA_BASE_URL",
@@ -1193,4 +1195,6 @@ class FlowsService:
             return (OLLAMA_EMBEDDING_COMPONENT_DISPLAY_NAME, OLLAMA_LLM_COMPONENT_DISPLAY_NAME)
         elif provider == "anthropic":
             return (None, "Anthropic")
+        elif provider == "alibaba":
+            return ("Alibaba Embeddings", "Alibaba")
         return (None, None)

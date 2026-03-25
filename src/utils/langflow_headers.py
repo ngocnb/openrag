@@ -35,6 +35,16 @@ async def add_provider_credentials_to_headers(headers: Dict[str, str], config, f
             ollama_endpoint = transform_localhost_url(config.providers.ollama.endpoint)
         headers["X-LANGFLOW-GLOBAL-VAR-OLLAMA_BASE_URL"] = str(ollama_endpoint)
 
+    # Add Alibaba credentials
+    if config.providers.alibaba.api_key:
+        headers["X-LANGFLOW-GLOBAL-VAR-ALIBABA_API_KEY"] = str(config.providers.alibaba.api_key)
+
+    if config.providers.alibaba.endpoint:
+        headers["X-LANGFLOW-GLOBAL-VAR-ALIBABA_BASE_URL"] = str(config.providers.alibaba.endpoint)
+
+    if config.providers.alibaba.embedding_endpoint:
+        headers["X-LANGFLOW-GLOBAL-VAR-ALIBABA_EMBEDDING_BASE_URL"] = str(config.providers.alibaba.embedding_endpoint)
+
 
 async def build_mcp_global_vars_from_config(config, flows_service=None) -> Dict[str, str]:
     """Build MCP global variables dictionary from OpenRAG configuration.
@@ -70,7 +80,18 @@ async def build_mcp_global_vars_from_config(config, flows_service=None) -> Dict[
         else:
             ollama_endpoint = transform_localhost_url(config.providers.ollama.endpoint)
         global_vars["OLLAMA_BASE_URL"] = ollama_endpoint
-    
+
+    # Add Alibaba credentials
+    if hasattr(config.providers, 'alibaba'):
+        if config.providers.alibaba.api_key:
+            global_vars["ALIBABA_API_KEY"] = config.providers.alibaba.api_key
+
+        if config.providers.alibaba.endpoint:
+            global_vars["ALIBABA_BASE_URL"] = config.providers.alibaba.endpoint
+
+        if config.providers.alibaba.embedding_endpoint:
+            global_vars["ALIBABA_EMBEDDING_BASE_URL"] = config.providers.alibaba.embedding_endpoint
+
     # Add selected embedding model
     if config.knowledge.embedding_model:
         global_vars["SELECTED_EMBEDDING_MODEL"] = config.knowledge.embedding_model
