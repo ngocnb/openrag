@@ -39,6 +39,12 @@ export interface ProviderSettings {
     endpoint?: string;
     configured?: boolean;
   };
+  alibaba?: {
+    has_api_key?: boolean;
+    endpoint?: string;
+    embedding_endpoint?: string;
+    configured?: boolean;
+  };
 }
 
 export interface OnboardingState {

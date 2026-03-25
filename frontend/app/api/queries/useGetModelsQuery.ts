@@ -34,6 +34,11 @@ export interface IBMModelsParams {
   projectId?: string;
 }
 
+export interface AlibabaModelsParams {
+  endpoint?: string;
+  apiKey?: string;
+}
+
 export const useGetOpenAIModelsQuery = (
   params?: OpenAIModelsParams,
   options?: Omit<UseQueryOptions<ModelsResponse>, "queryKey" | "queryFn">,
@@ -205,6 +210,54 @@ export const useGetIBMModelsQuery = (
   return queryResult;
 };
 
+export const useGetAlibabaModelsQuery = (
+  params?: AlibabaModelsParams,
+  options?: Omit<UseQueryOptions<ModelsResponse>, "queryKey" | "queryFn">,
+) => {
+  const queryClient = useQueryClient();
+
+  async function getAlibabaModels(): Promise<ModelsResponse> {
+    const url = new URL("/api/models/alibaba", window.location.origin);
+    const body: {
+      endpoint?: string;
+      api_key?: string;
+    } = {};
+    if (params?.endpoint) {
+      body.endpoint = params.endpoint;
+    }
+    if (params?.apiKey) {
+      body.api_key = params.apiKey;
+    }
+
+    const response = await fetch(url.toString(), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    if (response.ok) {
+      return await response.json();
+    } else {
+      throw new Error("Failed to fetch Alibaba models");
+    }
+  }
+
+  const queryResult = useQuery(
+    {
+      queryKey: ["models", "alibaba", params],
+      queryFn: getAlibabaModels,
+      staleTime: 0, // Always fetch fresh data
+      gcTime: 0, // Don't cache results
+      retry: false,
+      ...options,
+    },
+    queryClient,
+  );
+
+  return queryResult;
+};
+
 /**
  * Hook that automatically fetches models for the current LLM provider
  * based on the settings configuration
@@ -259,6 +312,20 @@ export const useGetCurrentProviderModelsQuery = (
     },
   );
 
+  const alibabaModels = useGetAlibabaModelsQuery(
+    {
+      endpoint: settings?.providers?.alibaba?.endpoint,
+      apiKey: "",
+    },
+    {
+      enabled:
+        currentProvider === "alibaba" &&
+        !!settings?.providers?.alibaba?.endpoint &&
+        options?.enabled !== false,
+      ...options,
+    },
+  );
+
   // Return the appropriate query result based on current provider
   switch (currentProvider) {
     case "openai":
@@ -269,6 +336,8 @@ export const useGetCurrentProviderModelsQuery = (
       return ollamaModels;
     case "watsonx":
       return ibmModels;
+    case "alibaba":
+      return alibabaModels;
     default:
       // Return a default/disabled query if no provider is set
       return {

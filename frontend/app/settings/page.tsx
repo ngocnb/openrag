@@ -17,6 +17,7 @@ import { useCreateApiKeyMutation } from "@/app/api/mutations/useCreateApiKeyMuta
 import { useRevokeApiKeyMutation } from "@/app/api/mutations/useRevokeApiKeyMutation";
 import { useGetApiKeysQuery } from "@/app/api/queries/useGetApiKeysQuery";
 import {
+  useGetAlibabaModelsQuery,
   useGetAnthropicModelsQuery,
   useGetIBMModelsQuery,
   useGetOllamaModelsQuery,
@@ -160,6 +161,19 @@ function KnowledgeSourcesPage() {
       },
     );
 
+  const { data: alibabaModels, isLoading: alibabaLoading } =
+    useGetAlibabaModelsQuery(
+      {
+        endpoint: settings?.providers?.alibaba?.endpoint,
+        apiKey: "",
+      },
+      {
+        enabled:
+          settings?.providers?.alibaba?.configured === true &&
+          !!settings?.providers?.alibaba?.endpoint,
+      },
+    );
+
   // Build grouped LLM model options from all configured providers
   const groupedLlmModels = [
     {
@@ -189,6 +203,13 @@ function KnowledgeSourcesPage() {
       icon: getModelLogo("", "watsonx"),
       models: watsonxModels?.language_models || [],
       configured: settings.providers?.watsonx?.configured === true,
+    },
+    {
+      group: "Alibaba",
+      provider: "alibaba",
+      icon: getModelLogo("", "alibaba"),
+      models: alibabaModels?.language_models || [],
+      configured: settings.providers?.alibaba?.configured === true,
     },
   ]
     .filter((provider) => provider.configured)
@@ -224,6 +245,13 @@ function KnowledgeSourcesPage() {
       models: watsonxModels?.embedding_models || [],
       configured: settings.providers?.watsonx?.configured === true,
     },
+    {
+      group: "Alibaba",
+      provider: "alibaba",
+      icon: getModelLogo("", "alibaba"),
+      models: alibabaModels?.embedding_models || [],
+      configured: settings.providers?.alibaba?.configured === true,
+    },
   ]
     .filter((provider) => provider.configured)
     .map((provider) => ({
@@ -236,9 +264,13 @@ function KnowledgeSourcesPage() {
     }));
 
   const isLoadingAnyLlmModels =
-    openaiLoading || anthropicLoading || ollamaLoading || watsonxLoading;
+    openaiLoading ||
+    anthropicLoading ||
+    ollamaLoading ||
+    watsonxLoading ||
+    alibabaLoading;
   const isLoadingAnyEmbeddingModels =
-    openaiLoading || ollamaLoading || watsonxLoading;
+    openaiLoading || ollamaLoading || watsonxLoading || alibabaLoading;
 
   // Mutations
   const updateSettingsMutation = useUpdateSettingsMutation({

@@ -40,7 +40,7 @@ logger = get_logger(__name__)
 
 class SettingsUpdateBody(BaseModel):
     llm_model: Optional[str] = Field(None, min_length=1)
-    llm_provider: Optional[str] = Field(None, pattern="^(openai|anthropic|watsonx|ollama)$")
+    llm_provider: Optional[str] = Field(None, pattern="^(openai|anthropic|watsonx|ollama|alibaba)$")
     system_prompt: Optional[str] = None
     chunk_size: Optional[int] = Field(None, gt=0)
     chunk_overlap: Optional[int] = Field(None, ge=0)
@@ -48,7 +48,7 @@ class SettingsUpdateBody(BaseModel):
     ocr: Optional[bool] = None
     picture_descriptions: Optional[bool] = None
     embedding_model: Optional[str] = Field(None, min_length=1)
-    embedding_provider: Optional[str] = Field(None, pattern="^(openai|watsonx|ollama)$")
+    embedding_provider: Optional[str] = Field(None, pattern="^(openai|watsonx|ollama|alibaba)$")
     index_name: Optional[str] = Field(None, min_length=1)
     openai_api_key: Optional[str] = Field(None, min_length=1)
     anthropic_api_key: Optional[str] = Field(None, min_length=1)
@@ -63,9 +63,9 @@ class SettingsUpdateBody(BaseModel):
 
 
 class OnboardingBody(BaseModel):
-    llm_provider: Optional[str] = Field(None, pattern="^(openai|anthropic|watsonx|ollama)$")
+    llm_provider: Optional[str] = Field(None, pattern="^(openai|anthropic|watsonx|ollama|alibaba)$")
     llm_model: Optional[str] = Field(None, min_length=1)
-    embedding_provider: Optional[str] = Field(None, pattern="^(openai|watsonx|ollama)$")
+    embedding_provider: Optional[str] = Field(None, pattern="^(openai|watsonx|ollama|alibaba)$")
     embedding_model: Optional[str] = Field(None, min_length=1)
     openai_api_key: Optional[str] = Field(None, min_length=1)
     anthropic_api_key: Optional[str] = Field(None, min_length=1)
