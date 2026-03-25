@@ -70,9 +70,31 @@ This step is **critical**. A robust testing plan is non-negotiable.
 
 ### Step 5 — Write Tests (Expect Failures)
 
-- Write all tests based on the testing plan.
-- Run the tests — they should **fail** at this point. That is expected and correct.
+**CRITICAL:** Tests MUST be written BEFORE implementation. This is TDD.
+
+Generate tests in this order:
+
+1. **Backend Unit Tests** (`tests/unit/test_{feature}.py`)
+   - Test dataclasses, configuration, utility functions
+   - Test API validation patterns
+   - Mock external dependencies (APIs, databases)
+   - Reference: `tests/unit/test_alibaba_config.py`
+
+2. **Frontend Unit Tests** (`frontend/tests/unit/{feature}.test.tsx`)
+   - Test React hooks with React Query wrapper
+   - Test TypeScript types/interfaces
+   - Mock fetch for API calls
+   - Reference: `frontend/tests/unit/alibaba-models-query.test.tsx`
+
+3. **E2E Tests** (`frontend/tests/core/{feature}.spec.ts`)
+   - Test user workflows in browser
+   - Use Playwright route mocking
+   - Test visibility and interaction
+   - Reference: `frontend/tests/core/alibaba-provider.spec.ts`
+
+- Run all tests — they should **fail** at this point. That is expected and correct.
 - A test suite that passes before implementation is a broken test suite.
+- See `.planning/codebase/TESTING.md` for full testing guidelines.
 
 ---
 
