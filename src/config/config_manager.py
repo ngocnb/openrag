@@ -42,12 +42,22 @@ class OllamaConfig:
 
 
 @dataclass
+class AlibabaConfig:
+    """Alibaba Cloud provider configuration."""
+    api_key: str = ""
+    endpoint: str = "https://coding-intl.dashscope.aliyuncs.com/v1"
+    embedding_endpoint: str = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
+    configured: bool = False
+
+
+@dataclass
 class ProvidersConfig:
     """All provider configurations."""
     openai: OpenAIConfig
     anthropic: AnthropicConfig
     watsonx: WatsonXConfig
     ollama: OllamaConfig
+    alibaba: AlibabaConfig
 
     def get_provider_config(self, provider: str):
         """Get configuration for a specific provider."""
@@ -60,6 +70,8 @@ class ProvidersConfig:
             return self.watsonx
         elif provider_lower == "ollama":
             return self.ollama
+        elif provider_lower == "alibaba":
+            return self.alibaba
         else:
             raise ValueError(f"Unknown provider: {provider}")
 
@@ -132,6 +144,7 @@ class OpenRAGConfig:
                 anthropic=AnthropicConfig(**_decrypt_provider(providers_data.get("anthropic", {}))),
                 watsonx=WatsonXConfig(**_decrypt_provider(providers_data.get("watsonx", {}))),
                 ollama=OllamaConfig(**_decrypt_provider(providers_data.get("ollama", {}))),
+                alibaba=AlibabaConfig(**_decrypt_provider(providers_data.get("alibaba", {}))),
             ),
             knowledge=KnowledgeConfig(**data.get("knowledge", {})),
             agent=AgentConfig(**data.get("agent", {})),
@@ -184,6 +197,7 @@ class ConfigManager:
                 "anthropic": {},
                 "watsonx": {},
                 "ollama": {},
+                "alibaba": {},
             },
             "knowledge": {},
             "agent": {},
@@ -201,7 +215,7 @@ class ConfigManager:
 
                 # Merge file config
                 if "providers" in file_config:
-                    for provider in ["openai", "anthropic", "watsonx", "ollama"]:
+                    for provider in ["openai", "anthropic", "watsonx", "ollama", "alibaba"]:
                         if provider in file_config["providers"]:
                             provider_data = file_config["providers"][provider]
                             # Check if api_key is unencrypted and we have a key
@@ -264,6 +278,14 @@ class ConfigManager:
         # Ollama provider settings
         if os.getenv("OLLAMA_ENDPOINT"):
             config_data["providers"]["ollama"]["endpoint"] = os.getenv("OLLAMA_ENDPOINT")
+
+        # Alibaba provider settings
+        if os.getenv("ALIBABA_API_KEY"):
+            config_data["providers"]["alibaba"]["api_key"] = os.getenv("ALIBABA_API_KEY")
+        if os.getenv("ALIBABA_ENDPOINT"):
+            config_data["providers"]["alibaba"]["endpoint"] = os.getenv("ALIBABA_ENDPOINT")
+        if os.getenv("ALIBABA_EMBEDDING_ENDPOINT"):
+            config_data["providers"]["alibaba"]["embedding_endpoint"] = os.getenv("ALIBABA_EMBEDDING_ENDPOINT")
 
         # Knowledge settings
         if os.getenv("EMBEDDING_MODEL"):

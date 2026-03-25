@@ -139,6 +139,11 @@ WATSONX_EMBEDDING_DIMENSIONS = {
     "sentence-transformers/all-minilm-l6-v2": 384,
 }
 
+ALIBABA_EMBEDDING_DIMENSIONS = {
+    "text-embedding-v3": 1024,
+    "text-embedding-v4": 2048,
+}
+
 INDEX_BODY = {
     "settings": {
         "index": {"knn": True},
@@ -508,6 +513,15 @@ class AppClients:
                     os.environ["OLLAMA_BASE_URL"] = config.providers.ollama.endpoint
                     os.environ["OLLAMA_ENDPOINT"] = config.providers.ollama.endpoint
                     logger.debug("Loaded Ollama endpoint from config")
+
+                # Set Alibaba credentials
+                if config.providers.alibaba.api_key:
+                    os.environ["ALIBABA_API_KEY"] = config.providers.alibaba.api_key
+                    logger.debug("Loaded Alibaba API key from config")
+                if config.providers.alibaba.endpoint:
+                    os.environ["ALIBABA_BASE_URL"] = config.providers.alibaba.endpoint
+                if config.providers.alibaba.embedding_endpoint:
+                    os.environ["ALIBABA_EMBEDDING_BASE_URL"] = config.providers.alibaba.embedding_endpoint
 
             except Exception as e:
                 logger.debug(

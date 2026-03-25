@@ -1,5 +1,5 @@
 import httpx
-from config.settings import KNN_EF_CONSTRUCTION, KNN_M, OPENAI_EMBEDDING_DIMENSIONS, VECTOR_DIM, WATSONX_EMBEDDING_DIMENSIONS
+from config.settings import KNN_EF_CONSTRUCTION, KNN_M, OPENAI_EMBEDDING_DIMENSIONS, VECTOR_DIM, WATSONX_EMBEDDING_DIMENSIONS, ALIBABA_EMBEDDING_DIMENSIONS
 from utils.container_utils import transform_localhost_url
 from utils.logging_config import get_logger
 
@@ -122,7 +122,7 @@ async def get_embedding_dimensions(model_name: str, provider: str = None, endpoi
         return await _probe_ollama_embedding_dimension(endpoint, model_name)
 
     # Check all model dictionaries
-    all_models = {**OPENAI_EMBEDDING_DIMENSIONS, **WATSONX_EMBEDDING_DIMENSIONS}
+    all_models = {**OPENAI_EMBEDDING_DIMENSIONS, **WATSONX_EMBEDDING_DIMENSIONS, **ALIBABA_EMBEDDING_DIMENSIONS}
 
     model_name = model_name.lower().strip().split(":")[0]
 
