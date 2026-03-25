@@ -110,6 +110,8 @@ Generate tests in this order:
 
 ### Step 7 — Run Review Agents (Pre-Implementation)
 
+**MANDATORY — cannot be skipped.**
+
 - Invoke each of the six review personas defined in `REVIEW_PERSONAS.md`:
   - Designer
   - Architect
@@ -123,6 +125,8 @@ Generate tests in this order:
 ---
 
 ### Step 8 — Adapt Plan Based on Reviews
+
+**MANDATORY — cannot be skipped.**
 
 - Incorporate feedback from all review agents.
 - If any reviewer does not give a **green light**, revise the plan and **loop back to Step 7**.
@@ -261,7 +265,7 @@ Step 5: Write tests FIRST → Run tests (expect failures)
     ↓ (if context > 70%: /compact)
 Step 6: /gsd:plan-phase {N} --auto
     ↓ (if context > 70%: /compact)
-Step 7-8: Run review agents, adapt plan (optional but recommended)
+Step 7-8: Run review agents, adapt plan (MANDATORY — all 6 reviewers must pass)
     ↓
 Step 9: /gsd:execute-phase {N} --auto
     ↓ (if context > 70%: /compact)
