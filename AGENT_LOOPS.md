@@ -29,14 +29,16 @@ This document defines the automated workflow the agent follows during the **Nigh
 
 ### Step 1 — Select a Task and Register Phase
 
-1. Check for **open bugs** first from `./.planning/bugs/`. Bugs have priority over features.
-2. If no bugs remain, scan `./.planning/specs/` for non-draft specs.
-3. For each new spec not yet in `ROADMAP.md`:
+1. Run `/clear` to start with fresh context.
+2. Reload ROADMAP.md and STATE.md to understand current state.
+3. Check for **open bugs** first from `./.planning/bugs/`. Bugs have priority over features.
+4. If no bugs remain, scan `./.planning/specs/` for non-draft specs.
+5. For each new spec not yet in `ROADMAP.md`:
    - Read `.planning/ROADMAP.md` to find the next available phase number.
    - Add a new phase entry to ROADMAP.md with the spec name and path.
    - Update `.planning/STATE.md` to reference the new phase.
-4. Pick the next **pending phase** from ROADMAP.md.
-5. Work on one phase at a time. Do not parallelize across phases.
+6. Pick the next **pending phase** from ROADMAP.md.
+7. Work on one phase at a time. Do not parallelize across phases.
 
 ---
 
@@ -218,3 +220,38 @@ When all tasks are complete:
 - **Tokens are cheap. Human time is not.** Run as many validation passes as needed before a human ever looks at it.
 - **Do not fix unrelated things.** Capture them and move on.
 - **Docs are living artifacts.** Update them as part of implementation, not after.
+- **Run continuously until complete.** After each GSD skill returns, immediately invoke the next step. Do NOT stop at "Next Up" outputs. The loop only ends when Step 17 (Final Report) is reached.
+
+---
+
+## Continuous Execution Flow
+
+When running Night Shift, execute this sequence without stopping:
+
+```
+Step 1: /clear → Reload ROADMAP.md, STATE.md
+    ↓
+Step 6: /gsd:plan-phase {N} --auto --skip-verify
+    ↓ (if context > 70%: /compact)
+Step 9: /gsd:execute-phase {N} --auto
+    ↓ (if context > 70%: /compact)
+Step 13: /gsd:verify-work {N}
+    ↓ (immediately after verification)
+Step 15: Update docs, commit, move spec
+    ↓ (immediately)
+Step 16: Loop to Step 1 for next phase (with /clear)
+```
+
+**DO NOT** output "Next Up" blocks or wait for user input between steps.
+
+---
+
+## Context Management
+
+**At Step 1 (start of each loop iteration):**
+- Run `/clear` to start with fresh context
+- Then reload: ROADMAP.md, STATE.md, and current phase plans
+
+**When context exceeds 70% usage:**
+- Run `/compact` automatically to compress conversation history
+- Continue execution without stopping
