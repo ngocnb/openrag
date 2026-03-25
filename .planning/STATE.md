@@ -4,12 +4,15 @@
 
 **Phase 1: Add Alibaba Cloud Provider**
 
-Status: `pending`
+Status: `planned`
 
 ## Context
 
-Spec is complete and ready for implementation. OpenAI-compatible mode will be used — no custom Langflow components needed.
+3 plans created in 3 waves:
+- Wave 1: Backend config (config_manager, settings, embeddings)
+- Wave 2: Langflow integration (headers, flows_service)
+- Wave 3: API settings and frontend
 
 ## Next Action
 
-Run `/gsd:plan-phase 1` to create implementation plan.
+Run `/gsd:execute-phase 1` to implement the plans.
