@@ -231,10 +231,22 @@ When running Night Shift, execute this sequence without stopping:
 ```
 Step 1: /clear → Reload ROADMAP.md, STATE.md
     ↓
-Step 6: /gsd:plan-phase {N} --auto --skip-verify
+Step 2-3: Load spec, documentation, and code (read files)
+    ↓
+Step 4: Develop testing plan (document test cases)
+    ↓
+Step 5: Write tests FIRST → Run tests (expect failures)
     ↓ (if context > 70%: /compact)
+Step 6: /gsd:plan-phase {N} --auto
+    ↓ (if context > 70%: /compact)
+Step 7-8: Run review agents, adapt plan (optional but recommended)
+    ↓
 Step 9: /gsd:execute-phase {N} --auto
     ↓ (if context > 70%: /compact)
+Step 10-11: Static analysis, linting, full test suite
+    ↓
+Step 12: Run review agents (post-implementation)
+    ↓
 Step 13: /gsd:verify-work {N}
     ↓ (immediately after verification)
 Step 15: Update docs, commit, move spec
@@ -243,6 +255,8 @@ Step 16: Loop to Step 1 for next phase (with /clear)
 ```
 
 **DO NOT** output "Next Up" blocks or wait for user input between steps.
+
+**CRITICAL:** Step 5 (Write Tests) MUST be executed BEFORE Step 9 (Implementation). Tests should fail initially - that's expected TDD behavior.
 
 ---
 
